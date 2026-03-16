@@ -41,7 +41,6 @@ public class Lab7 extends JFrame {
 
     private void buildMenuBar() {
         JMenuBar bar = new JMenuBar();
-        bar.setBackground(new Color(28, 28, 42));
         bar.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
 
         /* ── Файл ── */
@@ -52,7 +51,7 @@ public class Lab7 extends JFrame {
         miRestart.addActionListener(e -> restartApp());
 
         JMenuItem miExit = darkItem("Вихід");
-        miExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+        miExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
         miExit.addActionListener(e -> confirmExit());
 
         mFile.add(miRestart);
@@ -80,13 +79,16 @@ public class Lab7 extends JFrame {
 
     private static JMenu darkMenu(String text) {
         JMenu m = new JMenu(text);
-        m.setForeground(Color.WHITE);
+        m.setForeground(Color.BLACK);
         m.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         return m;
     }
 
     private static JMenuItem darkItem(String text) {
         JMenuItem i = new JMenuItem(text);
+        i.setForeground(Color.BLACK);
+        i.setBackground(Color.WHITE);
+        i.setOpaque(true);
         i.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         return i;
     }
@@ -170,15 +172,7 @@ public class Lab7 extends JFrame {
             + "<li><kbd>F1</kbd>     &mdash; Відкрити цю довідку.</li>"
             + "</ul>"
             + "<div class='note'><b>&#128204; Примітка:</b> Центр тяжіння (червона точка O) "
-            + "завжди залишається нерухомим. Пунктирні лінії &mdash; це радіус-вектори від O до вершин.</div>"
-            + "<h2>&#128203; Математична основа</h2>"
-            + "<p>Поворот точки <i>(x,&thinsp;y)</i> навколо центру <i>(c<sub>x</sub>,&thinsp;c<sub>y</sub>)</i> "
-            + "на кут <i>&theta;</i>:</p>"
-            + "<div class='formula'><pre>"
-            + "x' = c\u2093 + (x\u2212c\u2093)\u00B7cos(\u03B8) \u2212 (y\u2212c\u1D67)\u00B7sin(\u03B8)\n"
-            + "y' = c\u1D67 + (x\u2212c\u2093)\u00B7sin(\u03B8) + (y\u2212c\u1D67)\u00B7cos(\u03B8)</pre></div>"
-            + "<p>де кут &theta; збільшується на &omega; градусів щокадру (16&thinsp;мс/кадр &asymp; 60 FPS).</p>"
-            + "</body></html>";
+            + "завжди залишається нерухомим. Пунктирні лінії &mdash; це радіус-вектори від O до вершин.</div>";
     }
 
 
@@ -216,7 +210,7 @@ public class Lab7 extends JFrame {
         panel.add(lDesc, g);
 
         g.gridy = 3;
-        JLabel lCopy = new JLabel("\u00A9 2025  Лабораторна робота");
+        JLabel lCopy = new JLabel("\u00A9 2026  СІс-21 Нікітченко К.О");
         lCopy.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         lCopy.setForeground(new Color(100, 100, 130));
         panel.add(lCopy, g);
@@ -272,10 +266,10 @@ public class Lab7 extends JFrame {
             bar.setBackground(new Color(20, 20, 38));
             bar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(50, 52, 82)));
 
-            JButton btnPlay = makeBtn("\u23F8  Пауза");
+            JButton btnPlay = makeBtn("\u2016 Пауза");
             btnPlay.addActionListener(e -> {
                 paused = !paused;
-                btnPlay.setText(paused ? "\u25B6  Старт" : "\u23F8  Пауза");
+                btnPlay.setText(paused ? "Старт" : "\u2016  Пауза");
             });
 
             JLabel lblSpeed = new JLabel("Швидкість:");
@@ -287,7 +281,7 @@ public class Lab7 extends JFrame {
             sldSpeed.setPreferredSize(new Dimension(155, 28));
             sldSpeed.addChangeListener(e -> omega = sldSpeed.getValue() / 10.0);
 
-            JButton btnColor = makeBtn("\uD83C\uDFA8  Колір");
+            JButton btnColor = makeBtn("\u25CF Колір");
             btnColor.addActionListener(e -> {
                 Color c = JColorChooser.showDialog(this, "Колір заливки", fillCol);
                 if (c != null) fillCol = new Color(c.getRed(), c.getGreen(), c.getBlue(), 205);
@@ -371,6 +365,7 @@ public class Lab7 extends JFrame {
             double rad = Math.toRadians(angle);
             double cosA = Math.cos(rad), sinA = Math.sin(rad);
 
+            // Обчислення координат вершин після повороту
             int[] vx = new int[4], vy = new int[4];
             for (int i = 0; i < 4; i++) {
                 double bx = BASE[i][0], by = BASE[i][1];
@@ -433,6 +428,9 @@ public class Lab7 extends JFrame {
             g2.setColor(new Color(140, 195, 255, 195));
             g2.drawString(String.format("\u03B8 = %6.1f\u00B0", angle),  14, 24);
             g2.drawString(String.format("\u03C9 = %.2f \u00B0/\u043A\u0430\u0434\u0440", omega), 14, 42);
+        }
+    }
+}
         }
     }
 }
